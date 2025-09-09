@@ -50,6 +50,7 @@ func NewConfig() (*Config, error) {
 	}
 
 	return &Config{
+		Host:   ymlConfig.Host,
 		Port:   ymlConfig.Port,
 		DBName: ymlConfig.DBName,
 	}, nil
