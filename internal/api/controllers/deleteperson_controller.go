@@ -27,6 +27,11 @@ func (c *DeletePersonController) DeletePerson(w http.ResponseWriter, r *http.Req
 		return
 	}
 
+	if person.ID == 0 {
+		http.Error(w, "request without identifier", http.StatusBadRequest)
+		return
+	}
+
 	if err := c.service.DeletePerson(&person); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
