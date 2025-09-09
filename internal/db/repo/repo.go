@@ -41,7 +41,7 @@ func (r *reindexerRepo) GetPersonByID(id int) (*models.Person, error) {
 		item := data.(*models.Person)
 		return item, nil
 	}
-	return nil, fmt.Errorf("Error while create person")
+	return nil, fmt.Errorf("error while create person")
 }
 
 func (r *reindexerRepo) UpdatePerson(person *models.Person) error {
