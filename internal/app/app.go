@@ -16,12 +16,24 @@ func StartApp() (http.Handler, error) {
 	if err != nil {
 		panic(err)
 	}
+	// База данных
 	database := db.ConnectToDatabase(cfg)
 
+	// Репозиторий
 	repository := repo.NewReindexerRepo(database)
 
+	// Сервисы
 	createPersonService := services.NewCreatePersonService(repository)
+	deletePersonService := services.NewDeletePersonService(repository)
+	updatePersonService := services.NewUpdatePersonService(repository)
+	getPersonService := services.NewGetPersonService(repository)
+
+	// Контроллеры
 	createPersonController := controllers.NewCreatePersonController(createPersonService)
-	server := handlers.NewHTTPServer(createPersonController)
+	deletePersonController := controllers.NewDeletePersonController(deletePersonService)
+	updatePersonController := controllers.NewUpdatePersonController(updatePersonService)
+	getPersonController := controllers.NewGetPersonController(getPersonService)
+
+	server := handlers.NewHTTPServer(createPersonController, deletePersonController, updatePersonController, getPersonController)
 	return server, err
 }

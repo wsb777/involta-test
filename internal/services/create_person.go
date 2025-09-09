@@ -7,7 +7,7 @@ import (
 )
 
 type CreatePersonService interface {
-	CreatePerson(personDto *dto.PersonDto) error
+	CreatePerson(personDto *dto.PersonCreate) error
 }
 
 type createPersonService struct {
@@ -18,7 +18,7 @@ func NewCreatePersonService(repo repo.ReindexerRepo) CreatePersonService {
 	return &createPersonService{personRepo: repo}
 }
 
-func (s *createPersonService) CreatePerson(personDto *dto.PersonDto) error {
+func (s *createPersonService) CreatePerson(personDto *dto.PersonCreate) error {
 	person := &models.Person{
 		FirstName:  personDto.FirstName,
 		SecondName: personDto.SecondName,

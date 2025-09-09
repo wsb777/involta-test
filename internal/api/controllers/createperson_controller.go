@@ -8,7 +8,7 @@ import (
 )
 
 type CreatePersonService interface {
-	CreatePerson(person *dto.PersonDto) error
+	CreatePerson(person *dto.PersonCreate) error
 }
 
 type CreatePersonController struct {
@@ -21,7 +21,7 @@ func NewCreatePersonController(service CreatePersonService) *CreatePersonControl
 
 func (c *CreatePersonController) CreatePerson(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	var person dto.PersonDto
+	var person dto.PersonCreate
 	if err := json.NewDecoder(r.Body).Decode(&person); err != nil {
 		http.Error(w, "invalid request", http.StatusBadRequest)
 		return

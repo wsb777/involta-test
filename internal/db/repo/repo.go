@@ -5,7 +5,6 @@ import (
 	"log"
 	"time"
 
-	uuid "github.com/google/uuid"
 	"github.com/restream/reindexer/v5"
 	"github.com/wsb777/involta-test/internal/models"
 )
@@ -13,7 +12,7 @@ import (
 type ReindexerRepo interface {
 	CreatePerson(person *models.Person) error
 	GetPersonByID(id int) (*models.Person, error)
-	UpdatePerson(person *models.Person) (*models.Person, error)
+	UpdatePerson(person *models.Person) error
 	DeletePersonByID(id int) error
 }
 
@@ -27,14 +26,13 @@ func NewReindexerRepo(db *reindexer.Reindexer) ReindexerRepo {
 
 func (r *reindexerRepo) CreatePerson(person *models.Person) error {
 	person = &models.Person{
-		ID:         uuid.New().String(),
 		FirstName:  person.FirstName,
 		SecondName: person.SecondName,
 		MiddleName: person.MiddleName,
 		CreateAt:   time.Now().String(),
 		UpdateAt:   time.Now().String(),
 	}
-	err := r.db.Upsert("persons", person)
+	err := r.db.Upsert("persons", person, "id=serial()")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -51,16 +49,11 @@ func (r *reindexerRepo) GetPersonByID(id int) (*models.Person, error) {
 	return nil, fmt.Errorf("ошибка при создании пользователя")
 }
 
-func (r *reindexerRepo) UpdatePerson(person *models.Person) (*models.Person, error) {
-	item := &models.Person{
-		ID:         person.ID,
-		FirstName:  "123312",
-		SecondName: "12312313",
-		MiddleName: "92138901389",
-	}
-	err := r.db.Upsert("persons", item)
+func (r *reindexerRepo) UpdatePerson(person *models.Person) error {
+	person.UpdateAt = time.Now().String()
+	_, err := r.db.Update("persons", person)
 
-	return item, err
+	return err
 }
 
 func (r *reindexerRepo) DeletePersonByID(id int) error {
