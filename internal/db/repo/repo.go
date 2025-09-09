@@ -25,13 +25,8 @@ func NewReindexerRepo(db *reindexer.Reindexer) ReindexerRepo {
 }
 
 func (r *reindexerRepo) CreatePerson(person *models.Person) error {
-	person = &models.Person{
-		FirstName:  person.FirstName,
-		SecondName: person.SecondName,
-		MiddleName: person.MiddleName,
-		CreateAt:   time.Now().String(),
-		UpdateAt:   time.Now().String(),
-	}
+	person.CreateAt = time.Now().String()
+	person.UpdateAt = time.Now().String()
 	err := r.db.Upsert("persons", person, "id=serial()")
 	if err != nil {
 		log.Fatal(err)
@@ -46,7 +41,7 @@ func (r *reindexerRepo) GetPersonByID(id int) (*models.Person, error) {
 		item := data.(*models.Person)
 		return item, nil
 	}
-	return nil, fmt.Errorf("ошибка при создании пользователя")
+	return nil, fmt.Errorf("Error while create person")
 }
 
 func (r *reindexerRepo) UpdatePerson(person *models.Person) error {

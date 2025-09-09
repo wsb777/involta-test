@@ -1,9 +1,15 @@
 package dto
 
+type Document struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+
 type PersonCreate struct {
-	FirstName  string `json:"firstName"`
-	SecondName string `json:"secondName"`
-	MiddleName string `json:"middleName"`
+	FirstName  string     `json:"firstName"`
+	SecondName string     `json:"secondName"`
+	MiddleName string     `json:"middleName"`
+	Documents  []Document `json:"documents"`
 }
 
 type PersonID struct {

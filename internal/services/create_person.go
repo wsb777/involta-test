@@ -19,10 +19,17 @@ func NewCreatePersonService(repo repo.ReindexerRepo) CreatePersonService {
 }
 
 func (s *createPersonService) CreatePerson(personDto *dto.PersonCreate) error {
+	documentsCount := len(personDto.Documents)
+	documents := make([]models.Document, documentsCount)
+	for i, doc := range personDto.Documents {
+		documents[i].ID = doc.ID
+		documents[i].Name = doc.Name
+	}
 	person := &models.Person{
 		FirstName:  personDto.FirstName,
 		SecondName: personDto.SecondName,
 		MiddleName: personDto.MiddleName,
+		Documents:  documents,
 	}
 
 	return s.personRepo.CreatePerson(person)
