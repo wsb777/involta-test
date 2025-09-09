@@ -11,7 +11,7 @@ import (
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Print("Ошибка загрузки .env файла")
+		log.Print("Load env failed")
 	}
 	handler, err := app.StartApp()
 	if err != nil {
