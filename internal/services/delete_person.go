@@ -6,7 +6,7 @@ import (
 )
 
 type DeletePersonService interface {
-	DeletePerson(person *dto.PersonID) error
+	DeletePerson(person *dto.PersonDelete) error
 }
 
 type deletePersonService struct {
@@ -17,6 +17,6 @@ func NewDeletePersonService(repo repo.ReindexerRepo) DeletePersonService {
 	return &deletePersonService{personRepo: repo}
 }
 
-func (s *deletePersonService) DeletePerson(person *dto.PersonID) error {
+func (s *deletePersonService) DeletePerson(person *dto.PersonDelete) error {
 	return s.personRepo.DeletePersonByID(person.ID)
 }

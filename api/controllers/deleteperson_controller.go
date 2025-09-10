@@ -1,14 +1,14 @@
 package controllers
 
 import (
-	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/wsb777/involta-test/internal/dto"
 )
 
 type DeletePersonService interface {
-	DeletePerson(person *dto.PersonID) error
+	DeletePerson(person *dto.PersonDelete) error
 }
 
 type DeletePersonController struct {
@@ -21,11 +21,17 @@ func NewDeletePersonController(service DeletePersonService) *DeletePersonControl
 
 func (c *DeletePersonController) DeletePerson(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	var person dto.PersonID
-	if err := json.NewDecoder(r.Body).Decode(&person); err != nil {
-		http.Error(w, "invalid request", http.StatusBadRequest)
+	var person dto.PersonDelete
+
+	id := r.PathValue("id")
+	idNum, err := strconv.Atoi(id)
+
+	if err != nil {
+		http.Error(w, "id not a number", http.StatusBadRequest)
 		return
 	}
+
+	person.ID = idNum
 
 	if person.ID == 0 {
 		http.Error(w, "request without identifier", http.StatusBadRequest)

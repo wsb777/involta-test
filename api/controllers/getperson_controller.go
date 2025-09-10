@@ -3,12 +3,13 @@ package controllers
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/wsb777/involta-test/internal/dto"
 )
 
 type GetPersonService interface {
-	GetPerson(person *dto.PersonID) (*dto.PersonGet, error)
+	GetPerson(person *dto.PersonGet) (*dto.PersonGet, error)
 }
 
 type GetPersonController struct {
@@ -21,11 +22,16 @@ func NewGetPersonController(service GetPersonService) *GetPersonController {
 
 func (c *GetPersonController) GetPerson(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	var person dto.PersonID
-	if err := json.NewDecoder(r.Body).Decode(&person); err != nil {
-		http.Error(w, "invalid request", http.StatusBadRequest)
+	var person dto.PersonGet
+	id := r.PathValue("id")
+	idNum, err := strconv.Atoi(id)
+
+	if err != nil {
+		http.Error(w, "id not a number", http.StatusBadRequest)
 		return
 	}
+
+	person.ID = idNum
 
 	value, err := c.service.GetPerson(&person)
 	if err != nil {

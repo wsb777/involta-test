@@ -3,8 +3,8 @@ package app
 import (
 	"net/http"
 
-	"github.com/wsb777/involta-test/internal/api/controllers"
-	"github.com/wsb777/involta-test/internal/api/handlers"
+	"github.com/wsb777/involta-test/api/controllers"
+	"github.com/wsb777/involta-test/api/handlers"
 	"github.com/wsb777/involta-test/internal/config"
 	"github.com/wsb777/involta-test/internal/db"
 	"github.com/wsb777/involta-test/internal/db/repo"

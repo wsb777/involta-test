@@ -6,7 +6,7 @@ import (
 )
 
 type GetPersonService interface {
-	GetPerson(person *dto.PersonID) (*dto.PersonGet, error)
+	GetPerson(person *dto.PersonGet) (*dto.PersonGet, error)
 }
 
 type getPersonService struct {
@@ -17,7 +17,7 @@ func NewGetPersonService(repo repo.ReindexerRepo) GetPersonService {
 	return &getPersonService{personRepo: repo}
 }
 
-func (s *getPersonService) GetPerson(person *dto.PersonID) (*dto.PersonGet, error) {
+func (s *getPersonService) GetPerson(person *dto.PersonGet) (*dto.PersonGet, error) {
 	personModel, err := s.personRepo.GetPersonByID(person.ID)
 
 	if err != nil {
