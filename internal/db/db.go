@@ -11,7 +11,7 @@ import (
 )
 
 func ConnectToDatabase(config *config.Config) *reindexer.Reindexer {
-	connectPath := fmt.Sprintf("cproto://%v:%v/%v", config.Host, config.Port, config.DBName)
+	connectPath := fmt.Sprintf("cproto://%v:%v/%v", config.DBHost, config.DBPort, config.DBName)
 	log.Print("Connecting to Reindexer...")
 	db, err := reindexer.NewReindex(connectPath, reindexer.WithCreateDBIfMissing())
 

@@ -8,14 +8,14 @@ import (
 )
 
 type YmlConfig struct {
-	Host   string `yaml:"host"`
-	Port   string `yaml:"port"`
-	DBName string `yaml:"name"`
+	DBHost string `yaml:"db_host"`
+	DBPort string `yaml:"db_port"`
+	DBName string `yaml:"db_name"`
 }
 
 type Config struct {
-	Host   string
-	Port   string
+	DBHost string
+	DBPort string
 	DBName string
 }
 
@@ -32,12 +32,12 @@ func NewConfig() (*Config, error) {
 
 	if err != nil {
 		log.Print("Файл config.yml не найден, проверка .env")
-		host := checkEnv("HOST")
-		port := checkEnv("PORT")
+		host := checkEnv("DB_HOST")
+		port := checkEnv("DB_PORT")
 		dbName := checkEnv("DB_NAME")
 		return &Config{
-			Host:   host,
-			Port:   port,
+			DBHost: host,
+			DBPort: port,
 			DBName: dbName,
 		}, nil
 	}
@@ -50,8 +50,8 @@ func NewConfig() (*Config, error) {
 	}
 
 	return &Config{
-		Host:   ymlConfig.Host,
-		Port:   ymlConfig.Port,
+		DBHost: ymlConfig.DBHost,
+		DBPort: ymlConfig.DBPort,
 		DBName: ymlConfig.DBName,
 	}, nil
 }
