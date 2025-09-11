@@ -22,7 +22,7 @@ type Config struct {
 func checkEnv(value string) string {
 	s := os.Getenv(value)
 	if s == "" {
-		panic("Нету переменной: " + value)
+		panic("Not found: " + value)
 	}
 	return s
 }
@@ -31,7 +31,7 @@ func NewConfig() (*Config, error) {
 	data, err := os.ReadFile("config.yml")
 
 	if err != nil {
-		log.Print("Файл config.yml не найден, проверка .env")
+		log.Print("File config.yml not found, check .env")
 		host := checkEnv("DB_HOST")
 		port := checkEnv("DB_PORT")
 		dbName := checkEnv("DB_NAME")
