@@ -27,7 +27,6 @@ func StartApp() (http.Handler, error) {
 	// MemStore
 
 	memStore := cache.NewMemStore(time.Minute)
-	defer memStore.Stop()
 
 	// Сервисы
 	createPersonService := services.NewCreatePersonService(repository)
