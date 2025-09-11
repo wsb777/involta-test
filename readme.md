@@ -34,7 +34,7 @@
 
 - [PUT] api/v1/person/{id} - для обновления пользователя
 
-    Пример запроса, котрый нужно отправить:
+    Пример запроса, который нужно отправить:
 
     `{"firstName":"Ivan", "secondName":"Ivanov","middleName":"Ivanovich", "documents":[{"id":1, "name":"Справка"},{"id":2, "name":"Документ"}]}`
 

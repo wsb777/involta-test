@@ -2,9 +2,11 @@ package app
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/wsb777/involta-test/api/controllers"
 	"github.com/wsb777/involta-test/api/handlers"
+	"github.com/wsb777/involta-test/internal/cache"
 	"github.com/wsb777/involta-test/internal/config"
 	"github.com/wsb777/involta-test/internal/db"
 	"github.com/wsb777/involta-test/internal/db/repo"
@@ -22,11 +24,16 @@ func StartApp() (http.Handler, error) {
 	// Репозиторий
 	repository := repo.NewReindexerRepo(database)
 
+	// MemStore
+
+	memStore := cache.NewMemStore(time.Minute)
+	defer memStore.Stop()
+
 	// Сервисы
 	createPersonService := services.NewCreatePersonService(repository)
-	deletePersonService := services.NewDeletePersonService(repository)
-	updatePersonService := services.NewUpdatePersonService(repository)
-	getPersonService := services.NewGetPersonService(repository)
+	deletePersonService := services.NewDeletePersonService(repository, memStore)
+	updatePersonService := services.NewUpdatePersonService(repository, memStore)
+	getPersonService := services.NewGetPersonService(repository, memStore)
 
 	// Контроллеры
 	createPersonController := controllers.NewCreatePersonController(createPersonService)
