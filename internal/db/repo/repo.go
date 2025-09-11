@@ -42,7 +42,11 @@ func (r *reindexerRepo) GetPersonByID(id int) (*models.Person, error) {
 }
 
 func (r *reindexerRepo) UpdatePerson(person *models.Person) error {
-	_, err := r.db.Update("persons", person)
+	var err error
+	countOfUpdate := r.db.Query("persons").Where("id", reindexer.EQ, person.ID).Set("firstName", person.FirstName).Set("secondName", person.SecondName).Set("middleName", person.MiddleName).Set("updateAt", person.UpdateAt).Set("documents.", person.Documents).Update()
+	if countOfUpdate.Count() == 0 {
+		err = fmt.Errorf("entry is not updated")
+	}
 
 	return err
 }
