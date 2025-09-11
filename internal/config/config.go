@@ -31,7 +31,7 @@ func NewConfig() (*Config, error) {
 	data, err := os.ReadFile("config.yml")
 
 	if err != nil {
-		log.Print("File config.yml not found, check .env")
+		log.Print("File config.yml not found, checking .env")
 		host := checkEnv("DB_HOST")
 		port := checkEnv("DB_PORT")
 		dbName := checkEnv("DB_NAME")
