@@ -4,7 +4,6 @@ type Document struct {
 	ID       int    `reindex:"id"`
 	Name     string `reindex:"name"`
 	CreateAt string `reindex:"createAt"`
-	UpdateAt string `reindex:"updateAt"`
 }
 
 type Person struct {

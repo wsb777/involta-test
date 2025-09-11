@@ -24,12 +24,24 @@ func NewUpdatePersonService(repo repo.ReindexerRepo, personCache *cache.MemStore
 
 func (s *updatePersonService) UpdatePerson(personDto *dto.PersonUpdate) error {
 
+	timeNow := time.Now().String()
+
+	documentsCount := len(personDto.Documents)
+	documents := make([]models.Document, documentsCount)
+
+	for i, doc := range personDto.Documents {
+		documents[i].ID = doc.ID
+		documents[i].Name = doc.Name
+		documents[i].CreateAt = timeNow
+	}
+
 	person := &models.Person{
 		ID:         personDto.ID,
 		FirstName:  personDto.FirstName,
 		SecondName: personDto.SecondName,
 		MiddleName: personDto.MiddleName,
-		UpdateAt:   time.Now().String(),
+		Documents:  documents,
+		UpdateAt:   timeNow,
 	}
 
 	err := s.personRepo.UpdatePerson(person)

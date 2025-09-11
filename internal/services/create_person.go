@@ -30,7 +30,6 @@ func (s *createPersonService) CreatePerson(personDto *dto.PersonCreate) error {
 		documents[i].ID = doc.ID
 		documents[i].Name = doc.Name
 		documents[i].CreateAt = timeNow
-		documents[i].UpdateAt = timeNow
 	}
 	person := &models.Person{
 		FirstName:  personDto.FirstName,

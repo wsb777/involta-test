@@ -1,8 +1,6 @@
 package services
 
 import (
-	"log"
-
 	"github.com/wsb777/involta-test/internal/cache"
 	"github.com/wsb777/involta-test/internal/db/repo"
 	"github.com/wsb777/involta-test/internal/dto"
@@ -39,7 +37,6 @@ func (s *getPersonService) GetPerson(person *dto.PersonGet) (*dto.PersonGet, err
 		documents[i].ID = doc.ID
 		documents[i].Name = doc.Name
 		documents[i].CreateAt = doc.CreateAt
-		documents[i].UpdateAt = doc.UpdateAt
 	}
 
 	personDto := &dto.PersonGet{
@@ -51,8 +48,6 @@ func (s *getPersonService) GetPerson(person *dto.PersonGet) (*dto.PersonGet, err
 		CreateAt:   personModel.CreateAt,
 		UpdateAt:   personModel.UpdateAt,
 	}
-
-	log.Print(personModel)
 
 	s.memStore.Set(person.ID, personModel)
 
