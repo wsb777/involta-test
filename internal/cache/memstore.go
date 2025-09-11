@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"log"
 	"sync"
 	"time"
 
@@ -30,6 +31,7 @@ func NewMemStore(cleanupInterval time.Duration) *MemStore {
 func (m *MemStore) cleanup() {
 	m.mu.Lock()
 	defer m.mu.Unlock()
+	log.Print("[INFO] Start clean memstore")
 	now := time.Now().UnixNano()
 	for k, v := range m.values {
 		if now > v.Expiration {
