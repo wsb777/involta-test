@@ -41,7 +41,8 @@ func StartApp() (http.Handler, error) {
 	updatePersonController := controllers.NewUpdatePersonController(updatePersonService)
 	getPersonController := controllers.NewGetPersonController(getPersonService)
 	getPersonsListController := controllers.NewGetPersonsListController(getPersonsListService)
+	healthController := controllers.NewHealthController()
 
-	server := handlers.NewHTTPServer(createPersonController, deletePersonController, updatePersonController, getPersonController, getPersonsListController)
+	server := handlers.NewHTTPServer(createPersonController, deletePersonController, updatePersonController, getPersonController, getPersonsListController, healthController)
 	return server, err
 }
