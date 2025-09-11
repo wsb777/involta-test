@@ -1,6 +1,8 @@
 package services
 
 import (
+	"log"
+
 	"github.com/wsb777/involta-test/internal/cache"
 	"github.com/wsb777/involta-test/internal/db/repo"
 	"github.com/wsb777/involta-test/internal/dto"
@@ -30,12 +32,27 @@ func (s *getPersonService) GetPerson(person *dto.PersonGet) (*dto.PersonGet, err
 		}
 	}
 
+	documentsCount := len(personModel.Documents)
+	documents := make([]dto.DocumentGet, documentsCount)
+
+	for i, doc := range personModel.Documents {
+		documents[i].ID = doc.ID
+		documents[i].Name = doc.Name
+		documents[i].CreateAt = doc.CreateAt
+		documents[i].UpdateAt = doc.UpdateAt
+	}
+
 	personDto := &dto.PersonGet{
 		ID:         personModel.ID,
 		FirstName:  personModel.FirstName,
 		SecondName: personModel.SecondName,
 		MiddleName: personModel.MiddleName,
+		Documents:  documents,
+		CreateAt:   personModel.CreateAt,
+		UpdateAt:   personModel.UpdateAt,
 	}
+
+	log.Print(personModel)
 
 	s.memStore.Set(person.ID, personModel)
 

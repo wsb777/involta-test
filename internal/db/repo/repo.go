@@ -3,7 +3,6 @@ package repo
 import (
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/restream/reindexer/v5"
 	"github.com/wsb777/involta-test/internal/models"
@@ -25,8 +24,6 @@ func NewReindexerRepo(db *reindexer.Reindexer) ReindexerRepo {
 }
 
 func (r *reindexerRepo) CreatePerson(person *models.Person) error {
-	person.CreateAt = time.Now().String()
-	person.UpdateAt = time.Now().String()
 	err := r.db.Upsert("persons", person, "id=serial()")
 	if err != nil {
 		log.Fatal(err)
@@ -45,7 +42,6 @@ func (r *reindexerRepo) GetPersonByID(id int) (*models.Person, error) {
 }
 
 func (r *reindexerRepo) UpdatePerson(person *models.Person) error {
-	person.UpdateAt = time.Now().String()
 	_, err := r.db.Update("persons", person)
 
 	return err

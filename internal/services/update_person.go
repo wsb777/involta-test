@@ -1,6 +1,8 @@
 package services
 
 import (
+	"time"
+
 	"github.com/wsb777/involta-test/internal/cache"
 	"github.com/wsb777/involta-test/internal/db/repo"
 	"github.com/wsb777/involta-test/internal/dto"
@@ -27,6 +29,7 @@ func (s *updatePersonService) UpdatePerson(personDto *dto.PersonUpdate) error {
 		FirstName:  personDto.FirstName,
 		SecondName: personDto.SecondName,
 		MiddleName: personDto.MiddleName,
+		UpdateAt:   time.Now().String(),
 	}
 
 	err := s.personRepo.UpdatePerson(person)

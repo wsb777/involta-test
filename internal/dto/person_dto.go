@@ -1,29 +1,42 @@
 package dto
 
-type Document struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
+type DocumentCreate struct {
+	ID       int    `json:"id"`
+	Name     string `json:"name"`
+	CreateAt string `json:"createAt"`
+	UpdateAt string `json:"updateAt"`
+}
+
+type DocumentGet struct {
+	ID       int    `json:"id"`
+	Name     string `json:"name"`
+	CreateAt string `json:"createAt"`
+	UpdateAt string `json:"updateAt"`
 }
 
 type PersonCreate struct {
-	FirstName  string     `json:"firstName"`
-	SecondName string     `json:"secondName"`
-	MiddleName string     `json:"middleName"`
-	Documents  []Document `json:"documents"`
+	FirstName  string           `json:"firstName"`
+	SecondName string           `json:"secondName"`
+	MiddleName string           `json:"middleName"`
+	Documents  []DocumentCreate `json:"documents"`
 }
 
 type PersonUpdate struct {
-	ID         int    `json:"id"`
-	FirstName  string `json:"firstName"`
-	SecondName string `json:"secondName"`
-	MiddleName string `json:"middleName"`
+	ID         int              `json:"id"`
+	FirstName  string           `json:"firstName"`
+	SecondName string           `json:"secondName"`
+	MiddleName string           `json:"middleName"`
+	Documents  []DocumentCreate `json:"documents"`
 }
 
 type PersonGet struct {
-	ID         int    `json:"id"`
-	FirstName  string `json:"firstName"`
-	SecondName string `json:"secondName"`
-	MiddleName string `json:"middleName"`
+	ID         int           `json:"id"`
+	FirstName  string        `json:"firstName"`
+	SecondName string        `json:"secondName"`
+	MiddleName string        `json:"middleName"`
+	CreateAt   string        `json:"createAt"`
+	UpdateAt   string        `json:"updateAt"`
+	Documents  []DocumentGet `json:"documents"`
 }
 
 type PersonDelete struct {
