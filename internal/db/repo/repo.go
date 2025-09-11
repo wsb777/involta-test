@@ -13,6 +13,7 @@ type ReindexerRepo interface {
 	GetPersonByID(id int) (*models.Person, error)
 	UpdatePerson(person *models.Person) error
 	DeletePersonByID(id int) error
+	GetPersonsList(searchParams *models.SearchParams) ([]*models.Person, error)
 }
 
 type reindexerRepo struct {
@@ -54,4 +55,19 @@ func (r *reindexerRepo) UpdatePerson(person *models.Person) error {
 func (r *reindexerRepo) DeletePersonByID(id int) error {
 	_, err := r.db.Query("persons").Where("id", reindexer.EQ, id).Delete()
 	return err
+}
+
+func (r *reindexerRepo) GetPersonsList(searchParams *models.SearchParams) ([]*models.Person, error) {
+	var data []*models.Person
+	query := r.db.Query("persons").Match("fullName", "*"+searchParams.Text+"*", "<stemmers>").Where("id", reindexer.GT, searchParams.LastID).Limit(searchParams.Limit)
+	iterator := query.Exec()
+	if err := iterator.Error(); err != nil {
+		return data, err
+	}
+
+	for iterator.Next() {
+		person := iterator.Object().(*models.Person)
+		data = append(data, person)
+	}
+	return data, nil
 }

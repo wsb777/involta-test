@@ -33,13 +33,15 @@ func StartApp() (http.Handler, error) {
 	deletePersonService := services.NewDeletePersonService(repository, memStore)
 	updatePersonService := services.NewUpdatePersonService(repository, memStore)
 	getPersonService := services.NewGetPersonService(repository, memStore)
+	getPersonsListService := services.NewGetPersonsListService(repository)
 
 	// Контроллеры
 	createPersonController := controllers.NewCreatePersonController(createPersonService)
 	deletePersonController := controllers.NewDeletePersonController(deletePersonService)
 	updatePersonController := controllers.NewUpdatePersonController(updatePersonService)
 	getPersonController := controllers.NewGetPersonController(getPersonService)
+	getPersonsListController := controllers.NewGetPersonsListController(getPersonsListService)
 
-	server := handlers.NewHTTPServer(createPersonController, deletePersonController, updatePersonController, getPersonController)
+	server := handlers.NewHTTPServer(createPersonController, deletePersonController, updatePersonController, getPersonController, getPersonsListController)
 	return server, err
 }

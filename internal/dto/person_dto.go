@@ -34,6 +34,7 @@ type PersonGet struct {
 	FirstName  string        `json:"firstName"`
 	SecondName string        `json:"secondName"`
 	MiddleName string        `json:"middleName"`
+	Sort       int           `json:"sort"`
 	CreateAt   string        `json:"createAt"`
 	UpdateAt   string        `json:"updateAt"`
 	Documents  []DocumentGet `json:"documents"`
@@ -41,4 +42,10 @@ type PersonGet struct {
 
 type PersonDelete struct {
 	ID int `json:"id"`
+}
+
+type SearchParams struct {
+	Limit  int
+	LastID int
+	Text   string
 }
