@@ -46,6 +46,6 @@ type PersonDelete struct {
 
 type SearchParams struct {
 	Limit  int
-	LastID int
+	Offset int
 	Text   string
 }

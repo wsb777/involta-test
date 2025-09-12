@@ -23,7 +23,7 @@ func NewGetPersonsListService(repo repo.ReindexerRepo) GetPersonsListService {
 func (s *getPersonsListService) GetPersonsList(ctx context.Context, searchParamsDTO *dto.SearchParams) ([]dto.PersonGet, error) {
 	searchParams := &models.SearchParams{
 		Text:   searchParamsDTO.Text,
-		LastID: searchParamsDTO.LastID,
+		Offset: searchParamsDTO.Offset,
 		Limit:  searchParamsDTO.Limit,
 	}
 	data, err := s.personRepo.GetPersonsList(ctx, searchParams)

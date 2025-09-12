@@ -45,13 +45,13 @@ func (c *GetPersonsListController) GetPersonsList(w http.ResponseWriter, r *http
 		return
 	}
 
-	lastId := params.Get("lastId")
-	if lastId == "" {
+	offset := params.Get("lastId")
+	if offset == "" {
 		http.Error(w, "lastId not found", http.StatusBadRequest)
 		return
 	}
 
-	lastIdNum, err := strconv.Atoi(lastId)
+	offsetNum, err := strconv.Atoi(offset)
 	if err != nil {
 		http.Error(w, "lastId not number", http.StatusBadRequest)
 		return
@@ -59,7 +59,7 @@ func (c *GetPersonsListController) GetPersonsList(w http.ResponseWriter, r *http
 
 	searchParams := &dto.SearchParams{
 		Limit:  limitNum,
-		LastID: lastIdNum,
+		Offset: offsetNum,
 		Text:   text,
 	}
 

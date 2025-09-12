@@ -105,7 +105,7 @@ func (r *reindexerRepo) GetPersonsList(ctx context.Context, searchParams *models
 		return nil, err
 	}
 
-	query := r.db.Query("persons").Match("fullName", "*"+searchParams.Text+"*", "<stemmers>").Where("id", reindexer.GT, searchParams.LastID).Limit(searchParams.Limit)
+	query := r.db.Query("persons").Match("fullName", "*"+searchParams.Text+"*", "<stemmers>").Limit(searchParams.Limit).Offset(searchParams.Offset)
 	iterator := query.Exec()
 	defer iterator.Close()
 
