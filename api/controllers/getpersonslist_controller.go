@@ -73,8 +73,8 @@ func (c *GetPersonsListController) GetPersonsList(w http.ResponseWriter, r *http
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	jsonData, err := json.Marshal(value)
 
+	jsonData, err := json.Marshal(value)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
