@@ -45,9 +45,9 @@ func (c *GetPersonsListController) GetPersonsList(w http.ResponseWriter, r *http
 		return
 	}
 
-	offset := params.Get("lastId")
+	offset := params.Get("offset")
 	if offset == "" {
-		http.Error(w, "lastId not found", http.StatusBadRequest)
+		http.Error(w, "offset not found", http.StatusBadRequest)
 		return
 	}
 
