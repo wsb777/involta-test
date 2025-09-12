@@ -67,6 +67,7 @@ func (r *reindexerRepo) GetPersonsList(searchParams *models.SearchParams) ([]*mo
 
 	for iterator.Next() {
 		person := iterator.Object().(*models.Person)
+		person.Sort = int(iterator.Rank())
 		data = append(data, person)
 	}
 	return data, nil

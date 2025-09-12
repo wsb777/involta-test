@@ -11,6 +11,7 @@ type Person struct {
 	FirstName  string     `reindex:"firstName,text" json:"firstName,omitempty"`
 	SecondName string     `reindex:"secondName,text" json:"secondName,omitempty"`
 	MiddleName string     `reindex:"middleName,text" json:"middleName,omitempty"`
+	Sort       int        `json:"-"`
 	CreateAt   string     `reindex:"createAt" json:"createAt,omitempty"`
 	UpdateAt   string     `reindex:"updateAt" json:"updateAt,omitempty"`
 	Documents  []Document `reindex:"documents,json"`

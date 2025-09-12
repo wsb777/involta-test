@@ -30,11 +30,11 @@ type PersonUpdate struct {
 }
 
 type PersonGet struct {
-	ID         int    `json:"id"`
-	FirstName  string `json:"firstName"`
-	SecondName string `json:"secondName"`
-	MiddleName string `json:"middleName"`
-	Sort       int
+	ID         int           `json:"id"`
+	FirstName  string        `json:"firstName"`
+	SecondName string        `json:"secondName"`
+	MiddleName string        `json:"middleName"`
+	Sort       int           `json:"sort,omitempty"`
 	CreateAt   string        `json:"createAt"`
 	UpdateAt   string        `json:"updateAt"`
 	Documents  []DocumentGet `json:"documents"`

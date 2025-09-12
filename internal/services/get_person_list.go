@@ -46,7 +46,7 @@ func (s *getPersonsListService) GetPersonsList(searchParamsDTO *dto.SearchParams
 			FirstName:  value.FirstName,
 			SecondName: value.SecondName,
 			MiddleName: value.MiddleName,
-			Sort:       0,
+			Sort:       value.Sort,
 			CreateAt:   value.CreateAt,
 			UpdateAt:   value.UpdateAt,
 			Documents:  documents,
