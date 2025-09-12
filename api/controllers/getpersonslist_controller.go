@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"strconv"
@@ -9,7 +10,7 @@ import (
 )
 
 type GetPersonsListService interface {
-	GetPersonsList(searhParams *dto.SearchParams) ([]dto.PersonGet, error)
+	GetPersonsList(ctx context.Context, searhParams *dto.SearchParams) ([]dto.PersonGet, error)
 }
 
 type GetPersonsListController struct {
@@ -23,6 +24,8 @@ func NewGetPersonsListController(service GetPersonsListService) *GetPersonsListC
 func (c *GetPersonsListController) GetPersonsList(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	params := r.URL.Query()
+
+	ctx := r.Context()
 
 	limit := params.Get("limit")
 	if limit == "" {
@@ -65,7 +68,7 @@ func (c *GetPersonsListController) GetPersonsList(w http.ResponseWriter, r *http
 		return
 	}
 
-	value, err := c.service.GetPersonsList(searchParams)
+	value, err := c.service.GetPersonsList(ctx, searchParams)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

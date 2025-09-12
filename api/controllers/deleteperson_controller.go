@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"context"
 	"net/http"
 	"strconv"
 
@@ -8,7 +9,7 @@ import (
 )
 
 type DeletePersonService interface {
-	DeletePerson(person *dto.PersonDelete) error
+	DeletePerson(ctx context.Context, person *dto.PersonDelete) error
 }
 
 type DeletePersonController struct {
@@ -22,6 +23,8 @@ func NewDeletePersonController(service DeletePersonService) *DeletePersonControl
 func (c *DeletePersonController) DeletePerson(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	var person dto.PersonDelete
+
+	ctx := r.Context()
 
 	id := r.PathValue("id")
 	idNum, err := strconv.Atoi(id)
@@ -38,7 +41,7 @@ func (c *DeletePersonController) DeletePerson(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	if err := c.service.DeletePerson(&person); err != nil {
+	if err := c.service.DeletePerson(ctx, &person); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}

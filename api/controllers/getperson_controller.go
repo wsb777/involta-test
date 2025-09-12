@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"strconv"
@@ -9,7 +10,7 @@ import (
 )
 
 type GetPersonService interface {
-	GetPerson(person *dto.PersonGet) (*dto.PersonGet, error)
+	GetPerson(ctx context.Context, person *dto.PersonGet) (*dto.PersonGet, error)
 }
 
 type GetPersonController struct {
@@ -23,6 +24,8 @@ func NewGetPersonController(service GetPersonService) *GetPersonController {
 func (c *GetPersonController) GetPerson(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	var person dto.PersonGet
+
+	ctx := r.Context()
 	id := r.PathValue("id")
 	idNum, err := strconv.Atoi(id)
 
@@ -33,7 +36,7 @@ func (c *GetPersonController) GetPerson(w http.ResponseWriter, r *http.Request) 
 
 	person.ID = idNum
 
-	value, err := c.service.GetPerson(&person)
+	value, err := c.service.GetPerson(ctx, &person)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

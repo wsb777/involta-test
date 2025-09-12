@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"strconv"
@@ -9,7 +10,7 @@ import (
 )
 
 type UpdatePersonService interface {
-	UpdatePerson(person *dto.PersonUpdate) error
+	UpdatePerson(ctx context.Context, person *dto.PersonUpdate) error
 }
 
 type UpdatePersonController struct {
@@ -23,6 +24,9 @@ func NewUpdatePersonController(service UpdatePersonService) *UpdatePersonControl
 func (c *UpdatePersonController) UpdatePerson(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	var person dto.PersonUpdate
+
+	ctx := r.Context()
+
 	id := r.PathValue("id")
 	idNum, err := strconv.Atoi(id)
 
@@ -43,7 +47,7 @@ func (c *UpdatePersonController) UpdatePerson(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	if err := c.service.UpdatePerson(&person); err != nil {
+	if err := c.service.UpdatePerson(ctx, &person); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}

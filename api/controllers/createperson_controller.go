@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 
@@ -8,7 +9,7 @@ import (
 )
 
 type CreatePersonService interface {
-	CreatePerson(person *dto.PersonCreate) error
+	CreatePerson(ctx context.Context, person *dto.PersonCreate) error
 }
 
 type CreatePersonController struct {
@@ -22,11 +23,13 @@ func NewCreatePersonController(service CreatePersonService) *CreatePersonControl
 func (c *CreatePersonController) CreatePerson(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	var person dto.PersonCreate
+
+	ctx := r.Context()
 	if err := json.NewDecoder(r.Body).Decode(&person); err != nil {
 		http.Error(w, "invalid request", http.StatusBadRequest)
 		return
 	}
-	if err := c.service.CreatePerson(&person); err != nil {
+	if err := c.service.CreatePerson(ctx, &person); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}

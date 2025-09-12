@@ -20,6 +20,9 @@ func NewHTTPServer(createPersonController *controllers.CreatePersonController,
 	mux.HandleFunc("GET /api/v1/person/{id}", getPersonController.GetPerson)
 	mux.HandleFunc("GET /api/v1/persons", getPersonsListController.GetPersonsList)
 	mux.HandleFunc("GET /api/v1/health", healthController.Answer)
-	server := middleware.LogRequestInfoMiddleware(mux)
-	return server
+
+	logMiddleware := middleware.LogRequestInfoMiddleware(mux)
+	timeoutMiddleware := middleware.TimeoutMiddleware(logMiddleware)
+
+	return timeoutMiddleware
 }

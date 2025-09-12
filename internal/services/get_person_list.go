@@ -1,13 +1,15 @@
 package services
 
 import (
+	"context"
+
 	"github.com/wsb777/involta-test/internal/db/repo"
 	"github.com/wsb777/involta-test/internal/dto"
 	"github.com/wsb777/involta-test/internal/models"
 )
 
 type GetPersonsListService interface {
-	GetPersonsList(searchParamsDTO *dto.SearchParams) ([]dto.PersonGet, error)
+	GetPersonsList(ctx context.Context, searchParamsDTO *dto.SearchParams) ([]dto.PersonGet, error)
 }
 
 type getPersonsListService struct {
@@ -18,13 +20,13 @@ func NewGetPersonsListService(repo repo.ReindexerRepo) GetPersonsListService {
 	return &getPersonsListService{personRepo: repo}
 }
 
-func (s *getPersonsListService) GetPersonsList(searchParamsDTO *dto.SearchParams) ([]dto.PersonGet, error) {
+func (s *getPersonsListService) GetPersonsList(ctx context.Context, searchParamsDTO *dto.SearchParams) ([]dto.PersonGet, error) {
 	searchParams := &models.SearchParams{
 		Text:   searchParamsDTO.Text,
 		LastID: searchParamsDTO.LastID,
 		Limit:  searchParamsDTO.Limit,
 	}
-	data, err := s.personRepo.GetPersonsList(searchParams)
+	data, err := s.personRepo.GetPersonsList(ctx, searchParams)
 	if err != nil {
 		return nil, err
 	}

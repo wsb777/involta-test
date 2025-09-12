@@ -1,6 +1,7 @@
 package services
 
 import (
+	"context"
 	"time"
 
 	"github.com/wsb777/involta-test/internal/cache"
@@ -10,7 +11,7 @@ import (
 )
 
 type UpdatePersonService interface {
-	UpdatePerson(personDto *dto.PersonUpdate) error
+	UpdatePerson(ctx context.Context, personDto *dto.PersonUpdate) error
 }
 
 type updatePersonService struct {
@@ -22,7 +23,7 @@ func NewUpdatePersonService(repo repo.ReindexerRepo, personCache *cache.MemStore
 	return &updatePersonService{personRepo: repo, memStore: personCache}
 }
 
-func (s *updatePersonService) UpdatePerson(personDto *dto.PersonUpdate) error {
+func (s *updatePersonService) UpdatePerson(ctx context.Context, personDto *dto.PersonUpdate) error {
 
 	timeNow := time.Now().String()
 
@@ -44,7 +45,7 @@ func (s *updatePersonService) UpdatePerson(personDto *dto.PersonUpdate) error {
 		UpdateAt:   timeNow,
 	}
 
-	err := s.personRepo.UpdatePerson(person)
+	err := s.personRepo.UpdatePerson(ctx, person)
 
 	if err == nil {
 		s.memStore.Set(person.ID, person)

@@ -1,13 +1,15 @@
 package services
 
 import (
+	"context"
+
 	"github.com/wsb777/involta-test/internal/cache"
 	"github.com/wsb777/involta-test/internal/db/repo"
 	"github.com/wsb777/involta-test/internal/dto"
 )
 
 type GetPersonService interface {
-	GetPerson(person *dto.PersonGet) (*dto.PersonGet, error)
+	GetPerson(ctx context.Context, person *dto.PersonGet) (*dto.PersonGet, error)
 }
 
 type getPersonService struct {
@@ -19,12 +21,12 @@ func NewGetPersonService(repo repo.ReindexerRepo, personCache *cache.MemStore) G
 	return &getPersonService{personRepo: repo, memStore: personCache}
 }
 
-func (s *getPersonService) GetPerson(person *dto.PersonGet) (*dto.PersonGet, error) {
+func (s *getPersonService) GetPerson(ctx context.Context, person *dto.PersonGet) (*dto.PersonGet, error) {
 	var err error
 
 	personModel, exist := s.memStore.Get(person.ID)
 	if !exist {
-		personModel, err = s.personRepo.GetPersonByID(person.ID)
+		personModel, err = s.personRepo.GetPersonByID(ctx, person.ID)
 		if err != nil {
 			return nil, err
 		}

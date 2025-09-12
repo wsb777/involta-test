@@ -1,6 +1,7 @@
 package services
 
 import (
+	"context"
 	"time"
 
 	"github.com/wsb777/involta-test/internal/db/repo"
@@ -9,7 +10,7 @@ import (
 )
 
 type CreatePersonService interface {
-	CreatePerson(personDto *dto.PersonCreate) error
+	CreatePerson(ctx context.Context, personDto *dto.PersonCreate) error
 }
 
 type createPersonService struct {
@@ -20,7 +21,7 @@ func NewCreatePersonService(repo repo.ReindexerRepo) CreatePersonService {
 	return &createPersonService{personRepo: repo}
 }
 
-func (s *createPersonService) CreatePerson(personDto *dto.PersonCreate) error {
+func (s *createPersonService) CreatePerson(ctx context.Context, personDto *dto.PersonCreate) error {
 	timeNow := time.Now().String()
 
 	documentsCount := len(personDto.Documents)
@@ -40,5 +41,5 @@ func (s *createPersonService) CreatePerson(personDto *dto.PersonCreate) error {
 		UpdateAt:   timeNow,
 	}
 
-	return s.personRepo.CreatePerson(person)
+	return s.personRepo.CreatePerson(ctx, person)
 }
