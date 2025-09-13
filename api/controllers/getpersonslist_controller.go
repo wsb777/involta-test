@@ -53,7 +53,7 @@ func (c *GetPersonsListController) GetPersonsList(w http.ResponseWriter, r *http
 
 	offsetNum, err := strconv.Atoi(offset)
 	if err != nil {
-		http.Error(w, "lastId not number", http.StatusBadRequest)
+		http.Error(w, "offset not number", http.StatusBadRequest)
 		return
 	}
 
