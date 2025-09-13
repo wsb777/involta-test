@@ -137,7 +137,6 @@ func worker(ctx context.Context, tasksCh <-chan Task, resultsCh chan<- Task, wg 
 				return
 			}
 			num := rand.Intn(6)
-			numDoc := rand.Intn(2)
 
 			switch num {
 			case 0:
@@ -153,6 +152,7 @@ func worker(ctx context.Context, tasksCh <-chan Task, resultsCh chan<- Task, wg 
 			}
 
 			for i := range task.value.Documents {
+				numDoc := rand.Intn(2)
 				switch numDoc {
 				case 0:
 					task.value.Documents[i].Name = "Обработан"
