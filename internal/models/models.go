@@ -1,18 +1,25 @@
 package models
 
 type Document struct {
-	ID       string `reindex:"id"`
+	ID       int    `reindex:"id"`
 	Name     string `reindex:"name"`
 	CreateAt string `reindex:"createAt"`
-	UpdateAt string `reindex:"updateAt"`
 }
 
 type Person struct {
-	ID         string     `reindex:"id,,pk"`
-	FirstName  string     `reindex:"firstName"`
-	SecondName string     `reindex:"secondName"`
-	MiddleName string     `reindex:"middleName"`
-	CreateAt   string     `reindex:"createAt"`
-	UpdateAt   string     `reindex:"updateAt"`
+	ID         int        `reindex:"id,,pk"`
+	FirstName  string     `reindex:"firstName,text" json:"firstName,omitempty"`
+	SecondName string     `reindex:"secondName,text" json:"secondName,omitempty"`
+	MiddleName string     `reindex:"middleName,text" json:"middleName,omitempty"`
+	Sort       int        `json:"-"`
+	CreateAt   string     `reindex:"createAt" json:"createAt,omitempty"`
+	UpdateAt   string     `reindex:"updateAt" json:"updateAt,omitempty"`
 	Documents  []Document `reindex:"documents,json"`
+	_          struct{}   `reindex:"firstName+secondName+middleName=fullName,text,composite"`
+}
+
+type SearchParams struct {
+	Limit  int
+	Offset int
+	Text   string
 }

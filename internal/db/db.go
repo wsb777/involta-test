@@ -11,14 +11,14 @@ import (
 )
 
 func ConnectToDatabase(config *config.Config) *reindexer.Reindexer {
-	connectPath := fmt.Sprintf("cproto://%v:%v/%v", "localhost", config.Port, config.DBName)
-	log.Print("Подключение к Reindexer...")
+	connectPath := fmt.Sprintf("cproto://%v:%v/%v", config.DBHost, config.DBPort, config.DBName)
+	log.Print("[INFO] Connecting to Reindexer...")
 	db, err := reindexer.NewReindex(connectPath, reindexer.WithCreateDBIfMissing())
 
 	if err != nil {
 		panic(err)
 	}
-	log.Print("Успешное подключение!")
+	log.Print("[INFO] Successful connect!")
 
 	err = db.OpenNamespace("persons", reindexer.DefaultNamespaceOptions(), models.Person{})
 

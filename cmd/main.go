@@ -11,13 +11,13 @@ import (
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Print("Ошибка загрузки .env файла")
+		log.Print("[WARN] Load env failed")
 	}
 	handler, err := app.StartApp()
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("Server is running on :8080")
+	log.Println("[INFO] Server is running on :8080")
 
 	log.Fatal(http.ListenAndServe(":8080", handler))
 }

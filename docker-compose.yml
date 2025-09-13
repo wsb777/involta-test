@@ -1,0 +1,23 @@
+services:
+  involta-test:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - reindexer
+    environment:
+      - HOST=reindexer
+      - PORT=6534
+
+  reindexer:
+    image: reindexer/reindexer
+    container_name: reindexer_server
+    ports:
+      - "6534:6534"
+      - "9088:9088"
+    volumes:
+      - reindexer_data:/db
+    restart: unless-stopped
+
+volumes:
+  reindexer_data:

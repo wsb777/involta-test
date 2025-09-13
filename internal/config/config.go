@@ -8,24 +8,21 @@ import (
 )
 
 type YmlConfig struct {
-	Port   string `yaml:"port"`
-	DBName string `yaml:"name"`
-}
-
-type EnvConfig struct {
-	Port   string
-	DBName string
+	DBHost string `yaml:"db_host"`
+	DBPort string `yaml:"db_port"`
+	DBName string `yaml:"db_name"`
 }
 
 type Config struct {
-	Port   string
+	DBHost string
+	DBPort string
 	DBName string
 }
 
 func checkEnv(value string) string {
 	s := os.Getenv(value)
 	if s == "" {
-		panic("Нету переменной: " + value)
+		panic("Not found: " + value)
 	}
 	return s
 }
@@ -34,11 +31,13 @@ func NewConfig() (*Config, error) {
 	data, err := os.ReadFile("config.yml")
 
 	if err != nil {
-		log.Print("Файл config.yml не найден, проверка .env")
-		port := checkEnv("PORT")
+		log.Print("[WARN] File config.yml not found, checking .env")
+		host := checkEnv("DB_HOST")
+		port := checkEnv("DB_PORT")
 		dbName := checkEnv("DB_NAME")
 		return &Config{
-			Port:   port,
+			DBHost: host,
+			DBPort: port,
 			DBName: dbName,
 		}, nil
 	}
@@ -51,7 +50,8 @@ func NewConfig() (*Config, error) {
 	}
 
 	return &Config{
-		Port:   ymlConfig.Port,
+		DBHost: ymlConfig.DBHost,
+		DBPort: ymlConfig.DBPort,
 		DBName: ymlConfig.DBName,
 	}, nil
 }
