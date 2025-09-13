@@ -61,7 +61,7 @@ func (s *getPersonsListService) GetPersonsList(ctx context.Context, searchParams
 			Documents:  documents,
 		}
 	}
-	persons = s.dataProcesing(persons)
+	persons = s.dataProcessing(persons)
 
 	return persons, nil
 }
@@ -74,7 +74,7 @@ func (s *getPersonsListService) GetPersonsList(ctx context.Context, searchParams
 
 Сделал отдельной функцией, тк сейчас эта обработка не имеет смысла
 */
-func (s *getPersonsListService) dataProcesing(persons []dto.PersonGet) []dto.PersonGet {
+func (s *getPersonsListService) dataProcessing(persons []dto.PersonGet) []dto.PersonGet {
 	var wg sync.WaitGroup
 
 	tasksCh := make(chan Task)
