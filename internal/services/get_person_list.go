@@ -2,6 +2,8 @@ package services
 
 import (
 	"context"
+	"math/rand"
+	"sync"
 
 	"github.com/wsb777/involta-test/internal/db/repo"
 	"github.com/wsb777/involta-test/internal/dto"
@@ -14,6 +16,11 @@ type GetPersonsListService interface {
 
 type getPersonsListService struct {
 	personRepo repo.ReindexerRepo
+}
+
+type Task struct {
+	index int
+	value dto.PersonGet
 }
 
 func NewGetPersonsListService(repo repo.ReindexerRepo) GetPersonsListService {
@@ -54,6 +61,83 @@ func (s *getPersonsListService) GetPersonsList(ctx context.Context, searchParams
 			Documents:  documents,
 		}
 	}
+	persons = s.dataProcesing(persons)
 
 	return persons, nil
+}
+
+/*
+# COMMENT: Если эта функция имеет смысл, то лучше её переносить наверх и иметь два канала.
+
+В первый поступает models.Person для обработки, потом передается во второй уже в формате PersonGet.
+Так можно одновременно перевести из model.Person в dto.PersonGet и обработать поля.
+
+Сделал отдельной функцией, тк сейчас эта обработка не имеет смысла
+*/
+func (s *getPersonsListService) dataProcesing(persons []dto.PersonGet) []dto.PersonGet {
+	var wg sync.WaitGroup
+
+	tasksCh := make(chan Task)
+	resultCh := make(chan Task)
+	countOfWorkers := 10
+
+	for i := 0; i < countOfWorkers; i++ {
+		wg.Add(1)
+		go worker(tasksCh, resultCh, &wg)
+	}
+
+	go func() {
+		for i, person := range persons {
+			tasksCh <- Task{index: i, value: person}
+		}
+
+		close(tasksCh)
+	}()
+
+	go func() {
+		wg.Wait()
+		close(resultCh)
+	}()
+
+	results := make([]dto.PersonGet, len(persons))
+	for res := range resultCh {
+		results[res.index] = res.value
+	}
+
+	return results
+
+}
+
+func worker(tasksCh <-chan Task, resultsCh chan<- Task, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	for task := range tasksCh {
+
+		num := rand.Intn(6)
+		numDoc := rand.Intn(2)
+
+		switch num {
+		case 0:
+			task.value.CreateAt = "Обработан"
+		case 1:
+			task.value.UpdateAt = "Обработан"
+		case 2:
+			task.value.FirstName = "Обработан"
+		case 3:
+			task.value.SecondName = "Обработан"
+		case 4:
+			task.value.MiddleName = "Обработан"
+		}
+
+		for i := range task.value.Documents {
+			switch numDoc {
+			case 0:
+				task.value.Documents[i].Name = "Обработан"
+			case 1:
+				task.value.Documents[i].Name = "Обработан: " + task.value.Documents[i].Name
+			}
+		}
+
+		resultsCh <- task
+	}
 }
