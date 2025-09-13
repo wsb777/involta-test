@@ -63,11 +63,6 @@ func (c *GetPersonsListController) GetPersonsList(w http.ResponseWriter, r *http
 		Text:   text,
 	}
 
-	if err != nil {
-		http.Error(w, "id not a number", http.StatusBadRequest)
-		return
-	}
-
 	value, err := c.service.GetPersonsList(ctx, searchParams)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
